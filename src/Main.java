@@ -3,20 +3,19 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
-        String s1 = null;
-        String s2 = null;
         Scanner sc = new Scanner(System.in);
-        int testNum = 1;
         System.out.print("¿Cuál data set desea elegir (1,2, or 3)? ");
-        testNum = sc.nextInt();
+        int testNum = sc.nextInt();
         if ((testNum < 1) || (testNum > 3)) {
             System.out.println("Por favor ingrese 1,2, o 3");
             return;
         }
-        s1 = readSeq("test_data/"+"case" + testNum + "-s1");
-        s2 = readSeq("test_data/"+"case" + testNum + "-s2");
-        System.out.println("S-1: " + s1.length() + " bases");
-        System.out.println("S-2: " + s2.length() + " bases");
+        String s1 = readSeq("test_data/"+"case" + testNum + "-s1");
+        String s2 = readSeq("test_data/"+"case" + testNum + "-s2");
+        if (s1 != null && s2 != null){
+            System.out.println("S-1: " + s1.length() + " bases");
+            System.out.println("S-2: " + s2.length() + " bases");
+        }
 
         //Se obtiene la longitud de emparejamiento para hacer la comparación
         //
@@ -69,25 +68,35 @@ public class Main {
 
 
     private static List<String> SubStringMatch(String s1, String s2, int matchLength) {
+        //ArrayList donde se almacenan las substrings que coinciden
         List<String> res = new ArrayList<>();
-        int substring_num = s1.length() - matchLength + 1;
-        String[] substring_arr = new String[substring_num];
+        //Num de posibles substrings de longitud matchLength que existen en cada cadena
+        int substring_num1 = s1.length() - matchLength + 1;
+        int substring_num2 = s1.length() - matchLength + 1;
+        //Se crean los arreglos para almacenar los substrings de cada cadena con las longitudes calculadas anteriormente.
+        String[] substring_arr1 = new String[substring_num1];
+        String[] substring_arr2 = new String[substring_num2];
+        //Se ingresa cada substring en el respectivo arreglo
+        //S1
         for (int i = 0; i < s1.length() - matchLength + 1; i++) {
             String substring1 = s1.substring(i, i + matchLength);
-            substring_arr[i] = substring1;
+            substring_arr1[i] = substring1;
         }
-
-        System.out.println("\nExisten "
-                + substring_arr.length + " subcadenas de longitud " + matchLength +" en s1.");
-
-        for (int i = 0; i < s2.length()-matchLength +1; i++) {
+        //S2
+        for (int i = 0; i < s2.length() - matchLength + 1; i++) {
             String substring2 = s2.substring(i, i + matchLength);
-            for (int j = 0; j < substring_arr.length; j++){
-                if(substring2.equals(substring_arr[j])){
-                    res.add(substring2);
-                }
-            }
+            substring_arr1[i] = substring2;
         }
+        //Se imprime la cantidad de substrings en cada arreglo
+        System.out.println("\nExisten "
+                + substring_arr1.length + " subcadenas de longitud " + matchLength +" en s1.");
+        System.out.println("\nExisten "
+                + substring_arr2.length + " subcadenas de longitud " + matchLength +" en s1.");
+        //Llamado a función de ordenamiento SortArray(Stack o Cola) que retorne el arreglo ordenado
+        //Solo se ordena el arreglo 2
+        //String[] ordered_arr2 = SortArray(substring_arr2);
+
+        //Algoritmo binario de comparación... por implementar
         return res;
     }
 }
