@@ -22,7 +22,7 @@ public class Main {
         //
         System.out.print("Por favor ingrese la longitud de emparejamiento: ");
         int matchLength = sc.nextInt();
-        List<String> res = solve(s1, s2, matchLength);
+        List<String> res = SubStringMatch(s1, s2, matchLength);
 
         System.out.println("Se encontraron "+ res.size() + " subsecuencias comunes:");
         System.out.println(res);
@@ -68,53 +68,26 @@ public class Main {
     }
 
 
-    private static List<String> solve(String s1, String s2, int matchLength) {
+    private static List<String> SubStringMatch(String s1, String s2, int matchLength) {
         List<String> res = new ArrayList<>();
-        char[] ch1 = s1.toCharArray();
-        char[] ch2 = s2.toCharArray();
-        int l = ch1.length;
-        int m = ch2.length;
-        int[][] L = new int[l+1][m+1];
+        int substring_num = s1.length() - matchLength + 1;
+        String[] substring_arr = new String[substring_num];
+        for (int i = 0; i < s1.length() - matchLength + 1; i++) {
+            String substring1 = s1.substring(i, i + matchLength);
+            substring_arr[i] = substring1;
+        }
 
-        for(int i= 1; i <= l; i++)
-        {
-            for(int j = 1; j <= m; j++)
-            {
-                if(ch1[i-1] == ch2[j-1])
-                    L[i][j] = L[i-1][j-1] + 1;
+        System.out.println("\nExisten "
+                + substring_arr.length + " subcadenas de longitud " + matchLength +" en s1.");
 
-                else
-                    L[i][j] = 0;
-
-                StringBuilder sb = new StringBuilder();
-                if(L[i][j] == matchLength+1) {
-                    int ci = i, cj = j;
-                    while(L[ci][cj] > 0) {
-                        L[ci][cj] = 0;
-                        sb.insert(0, ch1[ci-1]);
-                        ci--;cj--;
-                    }
-                    sb.deleteCharAt(sb.length() - 1);
-                    res.add(sb.toString());
+        for (int i = 0; i < s2.length()-matchLength +1; i++) {
+            String substring2 = s2.substring(i, i + matchLength);
+            for (int j = 0; j < substring_arr.length; j++){
+                if(substring2.equals(substring_arr[j])){
+                    res.add(substring2);
                 }
             }
         }
-        /*
-        for(int i=L.length-1; i>=0; i--) {
-            for(int j=L[0].length-1;j>=0; j--) {
-                StringBuilder sb = new StringBuilder();
-                if(L[i][j] == matchLength+1) {
-                    int ci = i, cj = j;
-                    while(L[ci][cj] > 0) {
-                        L[ci][cj] = 0;
-                        sb.insert(0, ch1[ci-1]);
-                        ci--;cj--;
-                    }
-                    sb.deleteCharAt(sb.length() - 1);
-                    res.add(sb.toString());
-                }
-            }
-        }*/
         return res;
     }
 }
