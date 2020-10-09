@@ -21,11 +21,21 @@ public class Main {
         //
         System.out.print("Por favor ingrese la longitud de emparejamiento: ");
         int matchLength = sc.nextInt();
-        List<String> res = SubStringMatch(s1, s2, matchLength);
-
-        System.out.println("Se encontraron "+ res.size() + " subsecuencias comunes:");
-        System.out.println(res);
-
+        long startTime = System.nanoTime();
+        StackRef res;
+        if (s1 == null || s2 == null) {
+            throw new AssertionError();
+        } else {
+            res = SubStringMatch(s1, s2, matchLength);
+        }
+        long estimatedTime = System.nanoTime() - startTime;
+        int countCommon = 0;
+        while (!res.isEmpty()){
+            System.out.print(res.pop()+" ");
+            countCommon++;
+        }
+        System.out.println("\nSe encontraron " + countCommon + " subsecuencias comunes.\n");
+        System.out.println("Elapsed Time:"+ estimatedTime);
     }
 
     public static String readSeq(String fileName) {
@@ -67,12 +77,13 @@ public class Main {
     }
 
 
-    private static List<String> SubStringMatch(String s1, String s2, int matchLength) {
+
+    private static StackRef SubStringMatch(String s1, String s2, int matchLength) {
         //ArrayList donde se almacenan las substrings que coinciden
-        List<String> res = new ArrayList<>();
+        StackRef res = new StackRef();
         //Num de posibles substrings de longitud matchLength que existen en cada cadena
         int substring_num1 = s1.length() - matchLength + 1;
-        int substring_num2 = s1.length() - matchLength + 1;
+        int substring_num2 = s2.length() - matchLength + 1;
         //Se crean los arreglos para almacenar los substrings de cada cadena con las longitudes calculadas anteriormente.
         String[] substring_arr1 = new String[substring_num1];
         String[] substring_arr2 = new String[substring_num2];
@@ -85,18 +96,132 @@ public class Main {
         //S2
         for (int i = 0; i < s2.length() - matchLength + 1; i++) {
             String substring2 = s2.substring(i, i + matchLength);
-            substring_arr1[i] = substring2;
+            substring_arr2[i] = substring2;
         }
-        //Se imprime la cantidad de substrings en cada arreglo
-        System.out.println("\nExisten "
-                + substring_arr1.length + " subcadenas de longitud " + matchLength +" en s1.");
-        System.out.println("\nExisten "
-                + substring_arr2.length + " subcadenas de longitud " + matchLength +" en s1.");
-        //Llamado a función de ordenamiento SortArray(Stack o Cola) que retorne el arreglo ordenado
-        //Solo se ordena el arreglo 2
-        //String[] ordered_arr2 = SortArray(substring_arr2);
 
-        //Algoritmo binario de comparación... por implementar
+        //Se imprime la cantidad de substrings en cada arreglo
+        System.out.println("\nExisten " + substring_arr1.length + " subcadenas de longitud " + matchLength +" en s1.");
+        System.out.println("\nExisten " + substring_arr2.length + " subcadenas de longitud " + matchLength +" en s2.\n");
+
+        //Llamado a función de ordenamiento
+        sortArrayUsingStacks(substring_arr2);
+        //Algoritmo de comparación... por implementar
+        for(int i=0; i < substring_num1; i++){
+            int j = binarySearch(substring_arr2,substring_arr1[i]);
+            if (j == 1)
+                res.push(substring_arr1[i]);
+        }
         return res;
     }
+
+    public static int binarySearch(String[] arr, String x)
+    {
+        int l = 0, r = arr.length - 1, c = 0;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            // Check if x is present at mid
+            if (arr[m].equals(x))
+                return 1;
+            // If x greater, ignore left half
+            if (arr[m].compareTo(x) < 0)
+                l = m + 1;
+            // If x is smaller, ignore right half
+            else
+                r = m - 1;
+        }
+        // el substring no está presente
+        return c;
+    }
+
+    static void sortArrayUsingStacks(String []arr)
+    {
+        // Se hace push de los elementos del array al stack
+        int n = arr.length;
+        StackRef input = new StackRef();
+        for (String s : arr) input.push(s);
+
+        //Se ordena el stack utilizando la función sortStack
+        StackRef sortedStack = sortStack(input);
+
+        // Se asignan los elementos del Stack ordenado al array
+        for (int i = 0; i < n; i++)
+        {
+            arr[i] = sortedStack.peek();
+            sortedStack.pop();
+        }
+    }
+
+    static StackRef sortStack(StackRef input)
+    {
+        StackRef tmpStack = new StackRef();
+
+        while (!input.isEmpty())
+        {
+            // Se almacena el elemento top del input stack en una variable temporal
+            // Luego se le hace pop al input
+            String tmp = input.peek();
+            input.pop();
+
+            // Mientras tmpStack no esté vacío y su top sea menor a temp
+            while (!tmpStack.isEmpty() && tmpStack.peek().compareTo(tmp) < 0)
+            {
+                // se hace pop del tempStack y se empuja(push) al input stack
+                input.push(tmpStack.peek());
+                tmpStack.pop();
+            }
+            tmpStack.push(tmp);
+        }
+        return tmpStack;
+    }
+
+    //Classes------------------------------------------------------
+
+    public static class NodeGeneric<T> {
+        private final T data;
+        private NodeGeneric<T> next;
+        //Constructors
+        public NodeGeneric(T data){
+            this.data = data;
+            next = null;
+        }
+        //Getters
+        public T getData(){
+            return data;
+        }
+        public NodeGeneric getNext(){
+            return next;
+        }
+        public void setNext(NodeGeneric<T> next){
+            this.next = next;
+        }
+    }
+
+    public static class StackRef {
+        public NodeGeneric top;
+        //Constructor
+        public StackRef(){
+            top = null;
+        }
+        //Value returning Methods
+        public boolean isEmpty(){
+            return top == null;
+        }
+        public String pop() {
+            if (isEmpty())
+                throw new RuntimeException("Stack is Empty");
+            String s = String.valueOf(top.getData());
+            top = top.getNext();
+            return s;
+        }
+        //Void methods
+        public void push(String sub) {
+            NodeGeneric<String> newp = new NodeGeneric<>(sub);
+            newp.setNext(top);
+            top = newp;
+        }
+        public String peek(){
+            return String.valueOf(top.getData());
+        }
+    }
+
 }
