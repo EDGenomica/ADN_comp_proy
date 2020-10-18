@@ -14,7 +14,7 @@ public class ListArrayGeneric<T extends Comparable<T>> {
     public boolean binarySearch(T item) {
         int l = 0, r = count - 1;
         boolean found = false;
-        while (l <= r) {
+        while (!empty() && l <= r) {
             int m = l + (r - l) / 2;
             // Verifica si el item está presente en el medio.
             if (larray[m].compareTo(item) == 0){
