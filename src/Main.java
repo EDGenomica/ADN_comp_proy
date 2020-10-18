@@ -19,7 +19,6 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		mainMenu();
-		// Agregar función de Julian.
 	}
 
 	// ----------------------------------------**Menu Print
@@ -152,22 +151,21 @@ public class Main {
 		// Se obtiene la longitud de emparejamiento para hacer la comparación.
 		System.out.print("Por favor ingrese la longitud de emparejamiento: ");
 		int matchLength = sc.nextInt();
-		// Inicia la medición de tiempo.
-		long startTime = System.nanoTime();
 		// Se crea Stack de referencia que almacenará los resultados.
 		StackRefGeneric<String> commonSubs;
-		String reverse;
+		long startTime, estimatedTime;
+
 		// Verificación no nulidad de cadenas.
 		if (s1 == null || s2 == null) {
 			throw new AssertionError();
 		} else {
+			// Inicia la medición de tiempo.
+			startTime = System.nanoTime();
 			// Llamado a función principal de comparación
 			commonSubs = SubStringMatch(s1, s2, matchLength);
-			// freqSubs = FindingFrequentWordsBySorting(s1, matchLength);
-			// reverse = reverseCompliment(s1);
+			// Finaliza medición de tiempo.
+			estimatedTime = System.nanoTime() - startTime;
 		}
-		// Finaliza medición de tiempo.
-		long estimatedTime = System.nanoTime() - startTime;
 		// Contador de substrings comunes.
 		int countCommon = 0;
 
@@ -179,8 +177,6 @@ public class Main {
 		System.out.print("\nSe encontraron " + countCommon + " subsecuencias comunes.\n");
 		System.out.println(
 				"s1 tiene una similitud del " + countCommon * 100 / (s1.length() - matchLength + 1) + "% con s2.\n");
-		// System.out.println("-----------------------------------------------------------------------------------");
-		// System.out.println(reverse+"rev");
 		System.out.println("Elapsed Time:" + estimatedTime + "\n\n");
 	}
 
@@ -199,19 +195,17 @@ public class Main {
 		String s1 = readSeq("test_data_sec/" + "case" + testNum + ".txt");
 		if (s1 != null)
 			System.out.println("S-1: " + s1.length() + " bases");
-		System.out.print("Por favor ingrese la longitud de las subsecuencias deseada: ");
+		System.out.print("Por favor ingrese la longitud de subsecuencia deseada: ");
 		int subLength = sc.nextInt();
 		if (s1 == null) {
 			throw new AssertionError();
 		} else {
 			freqSubs = FindingFrequentSubsBySorting(s1, subLength);
 		}
-
 		while (!freqSubs.isEmpty())
 			// Pop del Stack de las substrings comunes para imprimirlas una a una.
 			System.out.print(freqSubs.pop() + "  ");
 		System.out.println("\n");
-
 	}
 
 	public static void occSubMenu() {
@@ -225,7 +219,7 @@ public class Main {
 		if (testNum == 0) {
 			mainMenu();
 		}
-		StackRefGeneric<Integer> occSubs;
+		QueueRefGeneric<Integer> occSubs;
 		String s1 = readSeq("test_data_sec/" + "case" + testNum + ".txt");
 		if (s1 != null)
 			System.out.println("S-1: " + s1.length() + " bases");
@@ -237,9 +231,9 @@ public class Main {
 			occSubs = PatternMatching(s1, occ.toUpperCase());
 		}
 		if (!occSubs.isEmpty()) {
-			System.out.println("La subsecuencia se encontr� en las posiciones:");
+			System.out.println("La subsecuencia se encontr� en las posiciones:");
 			while (!occSubs.isEmpty())
-				System.out.print(occSubs.pop() + " ");
+				System.out.print(occSubs.dequeue() + " ");
 		} else
 			System.out.println("No se encuentra la subsecuencia.");
 		System.out.println("\n");
@@ -298,7 +292,7 @@ public class Main {
 			}
 		}
 		if (!freqPatterns.isEmpty())
-			System.out.println("\nLas subsecuencias que aparecen " + maxCount + " veces son:");
+			System.out.println("\nLas subsecuencias más frecuentes de la cadena aparecen" + maxCount + " veces:");
 		return freqPatterns;
 	}
 
@@ -313,11 +307,11 @@ public class Main {
 	// ***************************Pattern Matching
 	// Method*********************************************************
 
-	public static StackRefGeneric<Integer> PatternMatching(String genome, String pattern) {
-		StackRefGeneric<Integer> indexes = new StackRefGeneric<>();
+	public static QueueRefGeneric<Integer>PatternMatching(String genome, String pattern) {
+		QueueRefGeneric<Integer> indexes = new QueueRefGeneric<>();
 		for (int i = 0; i < genome.length() - pattern.length(); i++) {
 			if (genome.substring(i, i + pattern.length()).equals(pattern))
-				indexes.push(i);
+				indexes.enqueue(i);
 		}
 		return indexes;
 	}

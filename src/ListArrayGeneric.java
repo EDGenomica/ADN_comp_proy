@@ -19,8 +19,8 @@ public class ListArrayGeneric<T extends Comparable<T>> {
             // Verifica si el item está presente en el medio.
             if (larray[m].compareTo(item) == 0){
                 //El item se encuentra en el arreglo
-                found = true;
                 delete(m);
+                return true;
             }
             // Si el item es mayor, ignora la mitad a la izquierda.
             else if (larray[m].compareTo(item) < 0)
@@ -43,23 +43,15 @@ public class ListArrayGeneric<T extends Comparable<T>> {
         return result;
     }
 
-    public boolean delete(int position) {
-        boolean deleted = false;
+    public void delete(int position) {
+
         if(!empty()) {
-            if(position >= 0) {
-                int j = position;
-                while (j < count-1) {
-                    larray[j] = larray[j+1];
-                    j++;
-                }
-                count--;
-                deleted = true;
-            }
+            for(int j = position; j<count-1; j++)
+                larray[j] = larray[j+1];
+            count--;
         }
-        else {
+        else
             throw new RuntimeException("List is Empty");
-        }
-        return deleted;
     }
 
     private boolean empty() {
