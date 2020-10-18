@@ -1,22 +1,33 @@
+/* *Authors: Julian Quintero, Natalia Monroy, Santiago Rodríguez, Víctor Torres.
+ * Date of Creation: Oct 10th 2020
+ * Version: v1 - ListArray implementation
+ * Program Name: Ada
+ * Institution: Universidad Nacional de Colombia
+ * Description: hfgfjiodps
+ * */
+
+/*Import statements*/
 import java.util.*;
 import java.io.*;
 import java.lang.*;
 
 public class Main {
 
+    //----------------------------------------**Main Method Class**-----------------------------------------------------
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        //El usuario selecciona el conjunto de datos a comparar.
-        System.out.print("¿Cuál data set desea elegir (1, 2, 3 o 4)? ");
+        //mainMenu();
         int testNum = sc.nextInt();
         //Agregar función de Julian.
-        if ((testNum < 1) || (testNum > 4)) {
+        if ((testNum < 1) || (testNum > 6)) {
             System.out.println("Por favor ingrese 1, 2, 3 o 4");
             return;
         }
         //Llamado a la función que lee las secuencias.
-        String s1 = readSeq("test_data/"+"case" + testNum + "-s1");
-        String s2 = readSeq("test_data/"+"case" + testNum + "-s2");
+        String s1 = readSeq("test_data_comp/"+"case" + testNum + "-s1.txt");
+        String s2 = readSeq("test_data_comp/"+"case" + testNum + "-s2.txt");
+
         //Se imprime el número de bases(caracteres) que tiene cada secuencia.
         if (s1 != null && s2 != null){
             System.out.println("S-1: " + s1.length() + " bases");
@@ -28,27 +39,278 @@ public class Main {
         //Inicia la medición de tiempo.
         long startTime = System.nanoTime();
         //Se crea Stack de referencia que almacenará los resultados.
-        StackRef res;
+        StackRefGeneric<String> commonSubs;
+        StackRefGeneric<String> freqSubs;
+        String reverse;
         //Verificación no nulidad de cadenas.
         if (s1 == null || s2 == null) {
             throw new AssertionError();
         } else {
             //Llamado a función principal de comparación
-            res = SubStringMatch(s1, s2, matchLength);
+            commonSubs = SubStringMatch(s1, s2, matchLength);
+            //freqSubs = FindingFrequentWordsBySorting(s1, matchLength);
+            //reverse = reverseCompliment(s1);
         }
         //Finaliza medición de tiempo.
         long estimatedTime = System.nanoTime() - startTime;
         //Contador de substrings comunes.
         int countCommon = 0;
-        while (!res.isEmpty()){
+
+        while (!commonSubs.isEmpty()){
             //Pop del Stack de las substrings comunes para imprimirlas una a una.
-            System.out.print(res.pop()+" ");
+            System.out.print(commonSubs.pop()+" ");
             countCommon++;
-        }
+        }/*
+        while (!freqSubs.isEmpty()) {
+            //Pop del Stack de las substrings comunes para imprimirlas una a una.
+            System.out.print(freqSubs.pop() + " ");
+            countCommon++;
+        }*/
         //
         System.out.println("\nSe encontraron " + countCommon + " subsecuencias comunes.\n");
+        System.out.println(countCommon);
+        //System.out.println("-----------------------------------------------------------------------------------");
+        //System.out.println(reverse+"rev");
         System.out.println("Elapsed Time:"+ estimatedTime);
     }
+
+    //----------------------------------------**Menu Print Methods**-----------------------------------------------------
+    //Menu principal
+    public static void mainMenuPrint(){
+        System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
+        System.out.println("**************** Sistema de gestión y análisis de ADN **************************");
+        System.out.println("** Seleccione una opción (1-4) o q para salir **:");
+        System.out.println("1.Comparación de secuencias de ADN - porcentaje de Similaridad.");
+        System.out.println("2.SubString(s) más frecuente en una secuencia.");
+        System.out.println("3.Ocurrencia de un SubString en una secuencia.");
+        System.out.println("4.Complemento reverso de una secuencia.");
+        System.out.println("0: Salir.");
+        System.out.println("****************************************************************************");
+    }
+    //Menú comparación de secuencias
+    public static void compMenuPrint(){
+        System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
+        System.out.println("**************** Sistema de gestión y análisis de ADN **************************");
+        System.out.println("---------------- Sección de comparación de Secuencias --------------------------");
+        System.out.println("** Seleccione el par de secuencias a comparar: ");
+        System.out.println("1.Short sequences                              ---- Orden: mil bases");
+        System.out.println("2.Beta Globin Locus (Human and mouse genomes)  ---- Orden: 10 mil bases");
+        System.out.println("3.Mnd2 Locus (Human and mouse genomes)         ---- Orden: 100 mil bases");
+        System.out.println("4.Vibrio Cholerae & E-Coli                     ---- Orden: 1-4 millones de bases");
+        System.out.println("0: Volver.");
+        System.out.println("****************************************************************************");
+    }
+    //Menú Substring más frecuente
+    public static void subFreqMenuPrint(){
+        System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
+        System.out.println("**************** Sistema de gestión y análisis de ADN **************************");
+        System.out.println("---------------- Sección de Substring más frecuente  --------------------------");
+        System.out.println("** Seleccione la secuencia que desea evaluar: ");
+        System.out.println("1.Short sequence                               ---- Orden: mil bases");
+        System.out.println("2.Beta Globin Locus                            ---- Orden: 10 mil bases");
+        System.out.println("3.Mnd2 Locus                                   ---- Orden: 100 mil bases");
+        System.out.println("4.Vibrio Cholerae                              ---- Orden: 1 millón de bases");
+        System.out.println("5.E-Coli                                       ---- Orden: 4 millones de bases");
+        System.out.println("4.Lynx Canadiensis                             ---- Orden: 6 millones de bases");
+        System.out.println("0: Volver.");
+        System.out.println("****************************************************************************");
+    }
+    //Menú ocurrencia de SubString
+    public static void occSubMenuPrint(){
+        System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
+        System.out.println("****************** Sistema de gestión y análisis de ADN ************************");
+        System.out.println("----------- Sección de ocurrencia de Substring en secuencia  --------------------");
+        System.out.println("** Seleccione la secuencia que desea evaluar: ");
+        System.out.println("1.Short sequence                               ---- Orden: mil bases");
+        System.out.println("2.Beta Globin Locus                            ---- Orden: 10 mil bases");
+        System.out.println("3.Mnd2 Locus                                   ---- Orden: 100 mil bases");
+        System.out.println("4.Vibrio Cholerae                              ---- Orden: 1 millón de bases");
+        System.out.println("5.E-Coli                                       ---- Orden: 4 millones de bases");
+        System.out.println("4.Lynx Canadiensis                             ---- Orden: 6 millones de bases");
+        System.out.println("0: Volver.");
+        System.out.println("****************************************************************************");
+    }
+
+    //Menú Reverse Compliment
+    public static void revSecMenuPrint(){
+        System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
+        System.out.println("******************* Sistema de gestión y análisis de ADN ***********************");
+        System.out.println("---------------- Sección Complemento Reverso de secuencia  ---------------------");
+        System.out.println("** Seleccione la secuencia que desea evaluar: ");
+        System.out.println("1.Short sequence                               ---- Orden: mil bases");
+        System.out.println("2.Beta Globin Locus                            ---- Orden: 10 mil bases");
+        System.out.println("3.Mnd2 Locus                                   ---- Orden: 100 mil bases");
+        System.out.println("4.Vibrio Cholerae                              ---- Orden: 1 millón de bases");
+        System.out.println("5.E-Coli                                       ---- Orden: 4 millones de bases");
+        System.out.println("4.Lynx Canadiensis                             ---- Orden: 6 millones de bases");
+        System.out.println("0: Volver.");
+        System.out.println("****************************************************************************");
+    }
+
+    //*************************************** Menu Paths Methods *******************************************************
+    public static void mainMenu(){
+        boolean  q = true;
+        Scanner sc = new Scanner(System.in);
+        mainMenuPrint();
+        int option = sc.nextInt();
+        while (q) {
+            if (option == 1)
+                compMenu();
+            else if (option == 2)
+                subFreqMenu();
+            else if (option == 3)
+                occSubMenu();
+            else if (option == 4)
+                revSeqMenu();
+            else if (option == 0)
+                q = false;
+            else {
+                System.out.println("Ingrese una opción válida");
+                mainMenuPrint();
+            }
+        }
+
+    }
+
+    public static void compMenu(){
+        Scanner sc = new Scanner(System.in);
+        compMenuPrint();
+        int test_data = sc.nextInt();
+    }
+
+    public static void subFreqMenu(){
+        Scanner sc = new Scanner(System.in);
+        subFreqMenuPrint();
+        int test_data = sc.nextInt();
+    }
+
+    public static void occSubMenu(){
+        Scanner sc = new Scanner(System.in);
+        occSubMenuPrint();
+        int test_data = sc.nextInt();
+    }
+
+    public static void revSeqMenu(){
+        Scanner sc = new Scanner(System.in);
+        revSecMenuPrint();
+        int test_data = sc.nextInt();
+    }
+
+    //*************************** Finding Frequent Subs Method *******************************************************
+
+    public static StackRefGeneric <String> FindingFrequentSubsBySorting(String text, int k){
+        StackRefGeneric <String> freqPatterns = new StackRefGeneric<>();
+        ListArrayGeneric <String> index = new ListArrayGeneric <>(text.length()-k+1);
+        int [] count = new int [text.length()-k+1];
+        for (int i = 0; i<text.length()-k+1; i++){
+            String pattern = text.substring(i,i+k);
+            index.insert(pattern);
+            count[i] = 1;
+        }
+
+        //Llamado a función de ordenamiento
+        quickSort(index, 0, text.length()-k);
+
+        for(int i = 1; i < text.length()-k; i++){
+            if (index.get(i).equals(index.get(i-1)))
+                count[i] = count[i-1]+1;
+        }
+        int maxCount = maxArr(count);
+        System.out.println("MAX COUNT "+ maxCount);
+        for (int i = 0; i < text.length()-k; i++){
+            if (count[i] == maxCount && index.get(i)!= null){
+                String pattern = index.get(i);
+                freqPatterns.push(pattern);
+            }
+        }
+        return freqPatterns;
+    }
+
+    public static int maxArr(int[] arr)
+    {
+        int i;
+        int max = arr[0];
+        for (i = 1; i < arr.length; i++)
+            if (arr[i] > max)
+                max = arr[i];
+        return max;
+    }
+    //***************************Pattern Matching Method*********************************************************
+
+    public static StackRefGeneric<Integer> PatternMatching(String genome, String pattern){
+        StackRefGeneric<Integer> indexes = new StackRefGeneric<>();
+        for (int i = 0; i< genome.length()-pattern.length(); i++){
+            if(genome.substring(i,i+pattern.length()).equals(pattern))
+                indexes.push(i);
+        }
+        return indexes;
+    }
+
+    //***************************Reverse Compliment Method*********************************************************
+
+    public static String reverseCompliment(String s){
+        Stack comp = new Stack();
+        for(int i = 0; i< s.length(); i++){
+            if(s.charAt(i) == 'A'){
+                comp.push('T');
+            }
+            else if(s.charAt(i) == 'T'){
+                comp.push('A');
+            }
+            else if(s.charAt(i) == 'C'){
+                comp.push('G');
+            }
+            else if(s.charAt(i) == 'G'){
+                comp.push('C');
+            }
+        }
+        String rev = "";
+        while(!comp.isEmpty()){
+            rev += comp.pop();
+        }
+        return rev;
+    }
+
+    //***************************SubString Matching Method*********************************************************
+
+    private static StackRefGeneric<String> SubStringMatch(String s1, String s2, int matchLength) {
+        //ArrayList donde se almacenan las substrings que coinciden
+        StackRefGeneric<String> res = new StackRefGeneric<>();
+        //Num de posibles substrings de longitud matchLength que existen en cada cadena
+        int substring_num1 = s1.length() - matchLength + 1;
+        int substring_num2 = s2.length() - matchLength + 1;
+        //Se crean los arreglos para almacenar los substrings de cada cadena con las longitudes calculadas anteriormente.
+        ListArrayGeneric <String> substring_arr1 = new ListArrayGeneric <String> (substring_num1);
+        ListArrayGeneric <String> substring_arr2 = new ListArrayGeneric <String> (substring_num2);
+        //Se ingresa cada substring en el respectivo arreglo
+        //S1
+        for (int i = 0; i < substring_num1; i++) {
+            String substring1 = s1.substring(i, i + matchLength);
+            substring_arr1.insert(substring1);
+        }
+        //S2
+        for (int i = 0; i < substring_num2; i++) {
+            String substring2 = s2.substring(i, i + matchLength);
+            substring_arr2.insert(substring2);
+        }
+
+        //Se imprime la cantidad de substrings en cada arreglo
+        System.out.println("\nExisten " + substring_arr1.count + " subcadenas de longitud " + matchLength +" en s1.");
+        System.out.println("\nExisten " + substring_arr2.count + " subcadenas de longitud " + matchLength +" en s2.\n");
+
+        //Llamado a función de ordenamiento
+        quickSort(substring_arr1, 0, substring_arr1.count-1);
+
+        //Algoritmo binario de comparación
+        for(int i=0; i < substring_num2; i++){
+            int j = substring_arr1.binarySearch(substring_arr2.get(i));
+            if (j >= 1)
+                res.push(substring_arr2.get(i));
+        }
+        return res;
+    }
+
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Auxiliar Methods %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     public static String readSeq(String fileName) {
         BufferedReader br;
@@ -64,19 +326,18 @@ public class Main {
         }
         StringWriter buffer = new StringWriter();
         // Accumulate each line of the file (minus surrounding whitespace)
-        // sequentially in a string buffer.  Convert to lower case as we read.
-        //
+        // sequentially in a string buffer.  Convert to upper case as we read.
         try {
             boolean stop = false;
             while (!stop)
             {
                 String nextline = br.readLine();
-                if (nextline == null) // end of file
+                if (nextline == null)
                     stop = true;
                 else
                 {
                     String seq = nextline.trim();
-                    buffer.write(seq.toLowerCase());
+                    buffer.write(seq.toUpperCase());
                 }
             }
         }
@@ -88,281 +349,37 @@ public class Main {
         return buffer.toString();
     }
 
-    private static int PatternCount(String s, String p){
-        int count = 0;
-        for(int i = 0; i < s.length()-p.length(); i++){
-            String sub = s.substring(i, i+ p.length());
-            if(sub.equals(p))
-                count ++;
-        }
-        return count;
-    }
-
-    private ListArrayGeneric<String> FreqSubstrings(String s, int k){
-        ListArrayGeneric<String> FreqSubs = new ListArrayGeneric();
-        int numOfSubs = s.length() - k + 1;
-        int[] counts = new int[numOfSubs];
-        for (int i = 0; i < s.length()-k; i++){
-            String pattern = s.substring(i, i+k);
-            counts[i] = PatternCount(s, pattern);
-        }
-        int maxCount = maxArr(counts);
-        for (int i = 0; i < s.length()-k; i++){
-            if (counts[i] == maxCount)
-                FreqSubs.insert(s.substring(i, i+k));
-        }
-        return FreqSubs;
-    }
-
-    static int maxArr(int[] arr)
-    {
-        int i;
-        // Initialize maximum element
-        int max = arr[0];
-        // Traverse array elements from second and
-        // compare every element with current max
-        for (i = 1; i < arr.length; i++)
-            if (arr[i] > max)
-                max = arr[i];
-        return max;
-    }
-
-    private static StackRef SubStringMatch(String s1, String s2, int matchLength) {
-        //ArrayList donde se almacenan las substrings que coinciden
-        StackRef res = new StackRef();
-        //Num de posibles substrings de longitud matchLength que existen en cada cadena
-        int substring_num1 = s1.length() - matchLength + 1;
-        int substring_num2 = s2.length() - matchLength + 1;
-        //Se crean los arreglos para almacenar los substrings de cada cadena con las longitudes calculadas anteriormente.
-        String[] substring_arr1 = new String[substring_num1];
-        String[] substring_arr2 = new String[substring_num2];
-        //Se ingresa cada substring en el respectivo arreglo
-        //S1
-        for (int i = 0; i < s1.length() - matchLength + 1; i++) {
-            String substring1 = s1.substring(i, i + matchLength);
-            substring_arr1[i] = substring1;
-        }
-        //S2
-        for (int i = 0; i < s2.length() - matchLength + 1; i++) {
-            String substring2 = s2.substring(i, i + matchLength);
-            substring_arr2[i] = substring2;
-        }
-
-        //Se imprime la cantidad de substrings en cada arreglo
-        System.out.println("\nExisten " + substring_arr1.length + " subcadenas de longitud " + matchLength +" en s1.");
-        System.out.println("\nExisten " + substring_arr2.length + " subcadenas de longitud " + matchLength +" en s2.\n");
-
-        //Llamado a función de ordenamiento
-        Quicksort(substring_arr2, 0, substring_num2-1);
-        //Algoritmo binario de comparación
-        for(int i=0; i < substring_num1; i++){
-            int j = binarySearch(substring_arr2,substring_arr1[i]);
-            if (j == 1)
-                res.push(substring_arr1[i]);
-        }
-        return res;
-    }
-
-    public static int binarySearch(String[] arr, String x)
-    {
-        int l = 0, r = arr.length - 1, c = 0;
-        while (l <= r) {
-            int m = l + (r - l) / 2;
-            // Check if x is present at mid
-            if (arr[m].equals(x))
-                return 1;
-            // If x greater, ignore left half
-            if (arr[m].compareTo(x) < 0)
-                l = m + 1;
-            // If x is smaller, ignore right half
-            else
-                r = m - 1;
-        }
-        // el substring no está presente
-        return c;
-    }
-
     //QuickSort algorithm
-
-    static int partition(String arr[], int low, int high)
+    static int partition(ListArrayGeneric <String> arr, int low, int high)
     {
-        String pivot = arr[high];
+        String pivot = arr.get(high);
         int i = (low-1); // index of smaller element
-        for (int j=low; j<high; j++)
-        {
+        for (int j=low; j<high; j++) {
             // If current element is smaller than the pivot
-            if (arr[j].compareTo(pivot) < 0)
-            {
+            if (arr.get(j).compareTo(pivot) < 0) {
                 i++;
-
                 // swap arr[i] and arr[j]
-                String temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
+                String temp = arr.get(i);
+                arr.set(i,arr.get(j));
+                arr.set(j,temp);
             }
         }
-
         // swap arr[i+1] and arr[high] (or pivot)
-        String temp = arr[i+1];
-        arr[i+1] = arr[high];
-        arr[high] = temp;
-
+        String temp = arr.get(i+1);
+        arr.set(i+1,arr.get(high));
+        arr.set(high,temp);
         return i+1;
     }
 
-    /* The main function that implements QuickSort()
-      arr[] --> Array to be sorted,
-      low  --> Starting index,
-      high  --> Ending index */
-    static void Quicksort(String arr[], int low, int high)
+    static void quickSort(ListArrayGeneric <String> arr, int low, int high)
     {
         if (low < high)
         {
-            /* pi is partitioning index, arr[pi] is
-              now at right place */
+            // pi es indice de partición
             int pi = partition(arr, low, high);
-
-            // Recursively sort elements before
-            // partition and after partition
-            Quicksort(arr, low, pi-1);
-            Quicksort(arr, pi+1, high);
+            // Ordena los elementos antes y después de partición recursivamente
+            quickSort(arr, low, pi-1);
+            quickSort(arr, pi+1, high);
         }
     }
-
-    //Classes------------------------------------------------------
-
-    public static class NodeGeneric<T> {
-        private final T data;
-        private NodeGeneric<T> next;
-        //Constructors
-        public NodeGeneric(T data){
-            this.data = data;
-            next = null;
-        }
-        //Getters
-        public T getData(){
-            return data;
-        }
-        public NodeGeneric getNext(){
-            return next;
-        }
-        public void setNext(NodeGeneric<T> next){
-            this.next = next;
-        }
-    }
-
-    public static class StackRef {
-        public NodeGeneric top;
-        //Constructor
-        public StackRef(){
-            top = null;
-        }
-        //Value returning Methods
-        public boolean isEmpty(){
-            return top == null;
-        }
-        public String pop() {
-            if (isEmpty())
-                throw new RuntimeException("Stack is Empty");
-            String s = String.valueOf(top.getData());
-            top = top.getNext();
-            return s;
-        }
-        //Void methods
-        public void push(String sub) {
-            NodeGeneric<String> newp = new NodeGeneric<>(sub);
-            newp.setNext(top);
-            top = newp;
-        }
-        public String peek(){
-            return String.valueOf(top.getData());
-        }
-    }
-
-    public class ListArrayGeneric<T extends Comparable<T>> {
-
-        private final int N = 5;
-        private int position, count;
-        private T[] larray;
-        T reference;
-
-        //Constructor
-        public ListArrayGeneric() {
-            count = 0;
-            larray = (T[])new Comparable[N];
-        }
-        //Value returning methods
-        private boolean empty() {
-            return count <= 0;
-        }
-        private boolean full() {
-            return count >= N;
-        }
-        public boolean delete(T item) {
-            boolean deleted = false;
-            if(!empty()) {
-                if(search(item)) {
-                    for(int j = position; j < count-1; j++)
-                        larray[j] = larray[j-1];
-                    count--;
-                    deleted = true;
-                }
-            }
-            else {
-                throw new RuntimeException("List is Empty");
-            }
-            return deleted;
-        }
-        public boolean insert(T item){
-            boolean inserted = false;
-            if(!full()){
-                //Does not insert duplicates
-                if(!search(item)){
-                    for(int j = count; j > position; j--)
-                        larray[j] = larray[j+1];
-                    larray[position] = item;
-                    count++;
-                    inserted = true;
-                }
-            }
-            else
-                throw new RuntimeException("List is Full");
-            return inserted;
-        }
-        private boolean search(T item) {
-            boolean found = false, stop = false;
-            int position = 0;
-            while (position < count && !stop){
-                if(larray[position].compareTo(item) >= 0){
-                    stop = true;
-                    if(larray[position].compareTo(item) == 0)
-                        found = true;
-                }
-                else
-                    position++;
-            }
-            return found;
-        }
-
-        public void output() {
-            System.out.print("List: ");
-            int j = 0;
-            while(j != count) {
-                System.out.print(larray[j]+" ");
-                j++;
-            }
-            System.out.println();
-        }
-        public int CompareTo(T item){
-            int result;
-            if(reference.compareTo(item) > 0)
-                result = 1;
-            else if (reference.compareTo(item) < 0)
-                result = -1;
-            else
-                result = 0;
-            return result;
-        }
-    }
-
 }
