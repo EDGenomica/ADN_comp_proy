@@ -11,16 +11,19 @@ public class ListArrayGeneric<T extends Comparable<T>> {
     }
 
     //Value returning methods
-    public int binarySearch(T item) {
-        int l = 0, r = count - 1, found = -1;
+    public boolean binarySearch(T item) {
+        int l = 0, r = count - 1;
+        boolean found = false;
         while (l <= r) {
             int m = l + (r - l) / 2;
             // Verifica si el item está presente en el medio.
-            if (larray[m].compareTo(item) == 0)
+            if (larray[m].compareTo(item) == 0){
                 //El item se encuentra en el arreglo
-                found = m;
+                found = true;
+                delete(m);
+            }
             // Si el item es mayor, ignora la mitad a la izquierda.
-            if (larray[m].compareTo(item) <= 0)
+            else if (larray[m].compareTo(item) < 0)
                 l = m + 1;
                 // Si el item es menor, ignora la mitad a la derecha.
             else
@@ -40,14 +43,13 @@ public class ListArrayGeneric<T extends Comparable<T>> {
         return result;
     }
 
-    public boolean delete(T item) {
+    public boolean delete(int position) {
         boolean deleted = false;
         if(!empty()) {
-            int position = binarySearch(item);
             if(position >= 0) {
                 int j = position;
                 while (j < count-1) {
-                    larray[j] = larray[j-1];
+                    larray[j] = larray[j+1];
                     j++;
                 }
                 count--;

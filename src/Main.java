@@ -283,11 +283,7 @@ public class Main {
         ListArrayGeneric <String> substring_arr1 = new ListArrayGeneric <String> (substring_num1);
         ListArrayGeneric <String> substring_arr2 = new ListArrayGeneric <String> (substring_num2);
         //Se ingresa cada substring en el respectivo arreglo
-        //S1
-        for (int i = 0; i < substring_num1; i++) {
-            String substring1 = s1.substring(i, i + matchLength);
-            substring_arr1.insert(substring1);
-        }
+
         //S2
         for (int i = 0; i < substring_num2; i++) {
             String substring2 = s2.substring(i, i + matchLength);
@@ -295,17 +291,17 @@ public class Main {
         }
 
         //Se imprime la cantidad de substrings en cada arreglo
-        System.out.println("\nExisten " + substring_arr1.count + " subcadenas de longitud " + matchLength +" en s1.");
         System.out.println("\nExisten " + substring_arr2.count + " subcadenas de longitud " + matchLength +" en s2.\n");
 
         //Llamado a función de ordenamiento
-        quickSort(substring_arr1, 0, substring_arr1.count-1);
+        quickSort(substring_arr2, 0, substring_arr2.count-1);
 
         //Algoritmo binario de comparación
-        for(int i=0; i < substring_num2; i++){
-            int j = substring_arr1.binarySearch(substring_arr2.get(i));
-            if (j >= 1)
-                res.push(substring_arr2.get(i));
+        for(int i=0; i < substring_num1; i++){
+            String sub = s1.substring(i, i + matchLength);
+            boolean j = substring_arr2.binarySearch(sub);
+            if (j)
+                res.push(sub);
         }
         return res;
     }
