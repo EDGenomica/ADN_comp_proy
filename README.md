@@ -19,6 +19,7 @@ No obstante, se recomienda su ejecución en ordenadores con plataformas Windows 
 ## Ejecución 🚀
 
 Se realiza en los entornos de desarrollo (p.e. Eclipse e IntelliJ IDEA), la clase principal Main se encuentra en la carpeta src.
+Para efectos de la ejecución en la infraestructura del cliente, es prerequisito que se tenga preinstalada la máquina virtual de JAVA y con ello se podrá ejecutar por consola el archvio .jar suministrado.
 
 ## Autores ✒️
 
