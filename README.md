@@ -16,6 +16,10 @@ ADA - Sistema de gestión y análisis de ADN se está desarrollando en lenguaje 
 Dados los beneficios del aspecto multiplataforma de los desarrollos construidos en JAVA, ADA en principio no tiene limitación. 
 No obstante, se recomienda su ejecución en ordenadores con plataformas Windows en sus versiones 8 y 10, en hardware con procesadores de 4 núcleos y memoria RAM de 4 a 8 GB. 
 
+## Ejecución 🚀
+
+Se realiza en los entornos de desarrollo (p.e. Eclipse e IntelliJ IDEA), la clase principal Main se encuentra en la carpeta src.
+
 ## Autores ✒️
 
 * **Natalia Monroy** 
