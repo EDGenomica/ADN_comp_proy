@@ -47,7 +47,7 @@ public class Main {
 		System.out.println("3.Mnd2 Locus (Human and mouse genomes)         ---- Orden: 100 mil bases");
 		System.out.println("4.Vibrio Cholerae & E-Coli                     ---- Orden: 1-4 millones de bases");
 		System.out.println("0: Volver.");
-		System.out.println("*******************************************************************************");
+		System.out.println("********************************************************************************");
 	}
 
 	// Menú Substring más frecuente
