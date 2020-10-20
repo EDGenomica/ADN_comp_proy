@@ -27,27 +27,27 @@ public class Main {
 	public static void mainMenuPrint() {
 		System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
 		System.out.println("**************** Sistema de gestión y análisis de ADN **************************");
-		System.out.println("** Seleccione una opción (1-4) o q para salir **:");
+		System.out.println("// Seleccione una opción (1-4) o 0 para salir:");
 		System.out.println("1.Comparación de secuencias de ADN - porcentaje de Similaridad.");
 		System.out.println("2.SubString(s) más frecuente en una secuencia.");
 		System.out.println("3.Ocurrencia de un SubString en una secuencia.");
 		System.out.println("4.Complemento reverso de una secuencia.");
 		System.out.println("0: Salir.");
-		System.out.println("****************************************************************************");
+		System.out.println("*******************************************************************************");
 	}
 
 	// Menú comparación de secuencias
 	public static void compMenuPrint() {
 		System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
 		System.out.println("**************** Sistema de gestión y análisis de ADN **************************");
-		System.out.println("---------------- Sección de comparación de Secuencias --------------------------");
+		System.out.println("---------------- Sección de comparación de Secuencias -------------------------");
 		System.out.println("** Seleccione el par de secuencias a comparar: ");
 		System.out.println("1.Short sequences                              ---- Orden: mil bases");
 		System.out.println("2.Beta Globin Locus (Human and mouse genomes)  ---- Orden: 10 mil bases");
 		System.out.println("3.Mnd2 Locus (Human and mouse genomes)         ---- Orden: 100 mil bases");
 		System.out.println("4.Vibrio Cholerae & E-Coli                     ---- Orden: 1-4 millones de bases");
 		System.out.println("0: Volver.");
-		System.out.println("****************************************************************************");
+		System.out.println("*******************************************************************************");
 	}
 
 	// Menú Substring más frecuente
@@ -63,7 +63,7 @@ public class Main {
 		System.out.println("5.E-Coli                                       ---- Orden: 4 millones de bases");
 		System.out.println("6.Lynx Canadiensis                             ---- Orden: 6 millones de bases");
 		System.out.println("0: Volver.");
-		System.out.println("****************************************************************************");
+		System.out.println("**********************************************************************************");
 	}
 
 	// Menú ocurrencia de SubString
@@ -86,7 +86,7 @@ public class Main {
 	public static void revSecMenuPrint() {
 		System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
 		System.out.println("******************* Sistema de gestión y análisis de ADN ***********************");
-		System.out.println("---------------- Sección Complemento Reverso de secuencia  ---------------------");
+		System.out.println("---------------- Sección Complemento Reverso de secuencia ---------------------");
 		System.out.println("** Seleccione la secuencia que desea evaluar: ");
 		System.out.println("1.Short sequence                               ---- Orden: mil bases");
 		System.out.println("2.Beta Globin Locus                            ---- Orden: 10 mil bases");
@@ -118,8 +118,10 @@ public class Main {
 			} else if (option == 4) {
 				revSeqMenu();
 				mainMenu();
-			} else if (option == 0)
+			} else if (option == 0) {
 				q = false;
+				System.exit(0);
+			}
 			else {
 				System.out.println("Ingrese una opción válida");
 				mainMenuPrint();
@@ -136,12 +138,12 @@ public class Main {
 			System.out.println("Por favor ingrese 1, 2, 3, 4 o 0\n");
 			compMenu();
 		}
-		if (testNum == 0) {
+		else if (testNum == 0) {
 			mainMenu();
 		}
 		// Llamado a la función que lee las secuencias.
-		String s1 = readSeq("test_data_comp/" + "case" + testNum + "-s1.txt");
-		String s2 = readSeq("test_data_comp/" + "case" + testNum + "-s2.txt");
+		String s1 = readSeq("data/test_data_comp/" + "case" + testNum + "-s1.txt");
+		String s2 = readSeq("data/test_data_comp/" + "case" + testNum + "-s2.txt");
 
 		// Se imprime el número de bases(caracteres) que tiene cada secuencia.
 		if (s1 != null && s2 != null) {
@@ -175,8 +177,8 @@ public class Main {
 			countCommon++;
 		}
 		System.out.print("\nSe encontraron " + countCommon + " subsecuencias comunes.\n");
-		System.out.println(
-				"s1 tiene una similitud del " + countCommon * 100 / (s1.length() - matchLength + 1) + "% con s2.\n");
+		//System.out.println(
+		//		"s1 tiene una similitud del " + countCommon * 100 / (s1.length() - matchLength + 1) + "% con s2.\n");
 		System.out.println("Elapsed Time:" + estimatedTime + "\n\n");
 	}
 
@@ -192,7 +194,7 @@ public class Main {
 			mainMenu();
 		}
 		StackRefGeneric<String> freqSubs;
-		String s1 = readSeq("test_data_sec/" + "case" + testNum + ".txt");
+		String s1 = readSeq("data/test_data_sec/" + "case" + testNum + ".txt");
 		if (s1 != null)
 			System.out.println("S-1: " + s1.length() + " bases");
 		System.out.print("Por favor ingrese la longitud de subsecuencia deseada: ");
@@ -220,7 +222,7 @@ public class Main {
 			mainMenu();
 		}
 		QueueRefGeneric<Integer> occSubs;
-		String s1 = readSeq("test_data_sec/" + "case" + testNum + ".txt");
+		String s1 = readSeq("data/test_data_sec/" + "case" + testNum + ".txt");
 		if (s1 != null)
 			System.out.println("S-1: " + s1.length() + " bases");
 		System.out.print("Por favor ingrese la subsecuencia que desea buscar: ");
@@ -251,7 +253,7 @@ public class Main {
 			mainMenu();
 		}
 		String rev;
-		String s1 = readSeq("test_data_sec/" + "case" + testNum + ".txt");
+		String s1 = readSeq("data/test_data_sec/" + "case" + testNum + ".txt");
 		if (s1 != null)
 			System.out.println("S-1: " + s1.length() + " bases");
 		if (s1 == null) {
@@ -292,7 +294,7 @@ public class Main {
 			}
 		}
 		if (!freqPatterns.isEmpty())
-			System.out.println("\nLas subsecuencias más frecuentes de la cadena aparecen" + maxCount + " veces:");
+			System.out.println("\nLas subsecuencias más frecuentes de la cadena aparecen " + maxCount + " veces:");
 		return freqPatterns;
 	}
 
