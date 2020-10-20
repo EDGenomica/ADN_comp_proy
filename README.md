@@ -1,6 +1,6 @@
 # ADA Solutions 🧬
 
-ADA es un sistema de gestión y análisis de ADN. Cuenta con 4 funcionalidades que arrojan información detallada sobre cadenas de ADN que facilitan a bioquímicos y genetistas su análisis y comparación.Las cuales son:
+ADA es un sistema de gestión y análisis de ADN. Cuenta con 4 funcionalidades que arrojan información detallada sobre cadenas de ADN que facilitan a bioquímicos y genetistas su análisis y comparación. Las cuales son:
   *	**Comparación de secuencias de ADN :** 
     El programa determina cuántas y cuáles subcadenas de longitud m, tienen en común dos secuencias de ADN.
   *	**Subcadena(s) más frecuentes en una secuencia:** 
