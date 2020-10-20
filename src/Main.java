@@ -121,8 +121,7 @@ public class Main {
 			} else if (option == 0) {
 				q = false;
 				System.exit(0);
-			}
-			else {
+			} else {
 				System.out.println("Ingrese una opción válida");
 				mainMenuPrint();
 			}
@@ -137,8 +136,7 @@ public class Main {
 		if ((testNum < 0) || (testNum > 4)) {
 			System.out.println("Por favor ingrese 1, 2, 3, 4 o 0\n");
 			compMenu();
-		}
-		else if (testNum == 0) {
+		} else if (testNum == 0) {
 			mainMenu();
 		}
 		// Llamado a la función que lee las secuencias.
@@ -177,8 +175,9 @@ public class Main {
 			countCommon++;
 		}
 		System.out.print("\nSe encontraron " + countCommon + " subsecuencias comunes.\n");
-		//System.out.println(
-		//		"s1 tiene una similitud del " + countCommon * 100 / (s1.length() - matchLength + 1) + "% con s2.\n");
+		// System.out.println(
+		// "s1 tiene una similitud del " + countCommon * 100 / (s1.length() -
+		// matchLength + 1) + "% con s2.\n");
 		System.out.println("Elapsed Time:" + estimatedTime + "\n\n");
 	}
 
@@ -309,7 +308,7 @@ public class Main {
 	// ***************************Pattern Matching
 	// Method*********************************************************
 
-	public static QueueRefGeneric<Integer>PatternMatching(String genome, String pattern) {
+	public static QueueRefGeneric<Integer> PatternMatching(String genome, String pattern) {
 		QueueRefGeneric<Integer> indexes = new QueueRefGeneric<>();
 		for (int i = 0; i < genome.length() - pattern.length(); i++) {
 			if (genome.substring(i, i + pattern.length()).equals(pattern))
