@@ -11,6 +11,7 @@ import java.util.*;
 import java.io.*;
 import java.lang.*;
 
+
 public class Main {
 
 	// ----------------------------------------**Main Method
@@ -19,6 +20,7 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		mainMenu();
+		// Agregar función de Julian.
 	}
 
 	// ----------------------------------------**Menu Print
@@ -27,27 +29,27 @@ public class Main {
 	public static void mainMenuPrint() {
 		System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
 		System.out.println("**************** Sistema de gestión y análisis de ADN **************************");
-		System.out.println("// Seleccione una opción (1-4) o 0 para salir:");
+		System.out.println("** Seleccione una opción (1-4) o q para salir **:");
 		System.out.println("1.Comparación de secuencias de ADN - porcentaje de Similaridad.");
 		System.out.println("2.SubString(s) más frecuente en una secuencia.");
 		System.out.println("3.Ocurrencia de un SubString en una secuencia.");
 		System.out.println("4.Complemento reverso de una secuencia.");
 		System.out.println("0: Salir.");
-		System.out.println("*******************************************************************************");
+		System.out.println("****************************************************************************");
 	}
 
 	// Menú comparación de secuencias
 	public static void compMenuPrint() {
 		System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
 		System.out.println("**************** Sistema de gestión y análisis de ADN **************************");
-		System.out.println("---------------- Sección de comparación de Secuencias -------------------------");
+		System.out.println("---------------- Sección de comparación de Secuencias --------------------------");
 		System.out.println("** Seleccione el par de secuencias a comparar: ");
 		System.out.println("1.Short sequences                              ---- Orden: mil bases");
 		System.out.println("2.Beta Globin Locus (Human and mouse genomes)  ---- Orden: 10 mil bases");
 		System.out.println("3.Mnd2 Locus (Human and mouse genomes)         ---- Orden: 100 mil bases");
 		System.out.println("4.Vibrio Cholerae & E-Coli                     ---- Orden: 1-4 millones de bases");
 		System.out.println("0: Volver.");
-		System.out.println("********************************************************************************");
+		System.out.println("****************************************************************************");
 	}
 
 	// Menú Substring más frecuente
@@ -63,7 +65,7 @@ public class Main {
 		System.out.println("5.E-Coli                                       ---- Orden: 4 millones de bases");
 		System.out.println("6.Lynx Canadiensis                             ---- Orden: 6 millones de bases");
 		System.out.println("0: Volver.");
-		System.out.println("**********************************************************************************");
+		System.out.println("****************************************************************************");
 	}
 
 	// Menú ocurrencia de SubString
@@ -86,7 +88,7 @@ public class Main {
 	public static void revSecMenuPrint() {
 		System.out.println("*********************** Bienvenido a ADA Solutions *****************************");
 		System.out.println("******************* Sistema de gestión y análisis de ADN ***********************");
-		System.out.println("---------------- Sección Complemento Reverso de secuencia ---------------------");
+		System.out.println("---------------- Sección Complemento Reverso de secuencia  ---------------------");
 		System.out.println("** Seleccione la secuencia que desea evaluar: ");
 		System.out.println("1.Short sequence                               ---- Orden: mil bases");
 		System.out.println("2.Beta Globin Locus                            ---- Orden: 10 mil bases");
@@ -107,6 +109,7 @@ public class Main {
 		int option = sc.nextInt();
 		while (q) {
 			if (option == 1) {
+				//option=5;
 				compMenu();
 				mainMenu();
 			} else if (option == 2) {
@@ -120,8 +123,9 @@ public class Main {
 				mainMenu();
 			} else if (option == 0) {
 				q = false;
-				System.exit(0);
-			} else {
+			System.exit(0);}
+			
+			else {
 				System.out.println("Ingrese una opción válida");
 				mainMenuPrint();
 			}
@@ -133,15 +137,18 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		compMenuPrint();
 		int testNum = sc.nextInt();
-		if ((testNum < 0) || (testNum > 4)) {
+		
+		if (testNum == 0) {
+			mainMenu();
+			return;
+		}
+		if ((testNum < 1) || (testNum > 4)) {
 			System.out.println("Por favor ingrese 1, 2, 3, 4 o 0\n");
 			compMenu();
-		} else if (testNum == 0) {
-			mainMenu();
 		}
 		// Llamado a la función que lee las secuencias.
-		String s1 = readSeq("data/test_data_comp/" + "case" + testNum + "-s1.txt");
-		String s2 = readSeq("data/test_data_comp/" + "case" + testNum + "-s2.txt");
+		String s1 = readSeq("test_data_comp/" + "case" + testNum + "-s1.txt");
+		String s2 = readSeq("test_data_comp/" + "case" + testNum + "-s2.txt");
 
 		// Se imprime el número de bases(caracteres) que tiene cada secuencia.
 		if (s1 != null && s2 != null) {
@@ -151,21 +158,22 @@ public class Main {
 		// Se obtiene la longitud de emparejamiento para hacer la comparación.
 		System.out.print("Por favor ingrese la longitud de emparejamiento: ");
 		int matchLength = sc.nextInt();
+		// Inicia la medición de tiempo.
+		long startTime = System.nanoTime();
 		// Se crea Stack de referencia que almacenará los resultados.
 		StackRefGeneric<String> commonSubs;
-		long startTime, estimatedTime;
-
+		String reverse;
 		// Verificación no nulidad de cadenas.
 		if (s1 == null || s2 == null) {
 			throw new AssertionError();
 		} else {
-			// Inicia la medición de tiempo.
-			startTime = System.nanoTime();
 			// Llamado a función principal de comparación
 			commonSubs = SubStringMatch(s1, s2, matchLength);
-			// Finaliza medición de tiempo.
-			estimatedTime = System.nanoTime() - startTime;
+			// freqSubs = FindingFrequentWordsBySorting(s1, matchLength);
+			// reverse = reverseCompliment(s1);
 		}
+		// Finaliza medición de tiempo.
+		long estimatedTime = System.nanoTime() - startTime;
 		// Contador de substrings comunes.
 		int countCommon = 0;
 
@@ -175,9 +183,10 @@ public class Main {
 			countCommon++;
 		}
 		System.out.print("\nSe encontraron " + countCommon + " subsecuencias comunes.\n");
-		// System.out.println(
-		// "s1 tiene una similitud del " + countCommon * 100 / (s1.length() -
-		// matchLength + 1) + "% con s2.\n");
+		System.out.println(
+				"s1 tiene una similitud del " + countCommon * 100 / (s1.length() - matchLength + 1) + "% con s2.\n");
+		// System.out.println("-----------------------------------------------------------------------------------");
+		// System.out.println(reverse+"rev");
 		System.out.println("Elapsed Time:" + estimatedTime + "\n\n");
 	}
 
@@ -193,20 +202,22 @@ public class Main {
 			mainMenu();
 		}
 		StackRefGeneric<String> freqSubs;
-		String s1 = readSeq("data/test_data_sec/" + "case" + testNum + ".txt");
+		String s1 = readSeq("test_data_sec/" + "case" + testNum + ".txt");
 		if (s1 != null)
 			System.out.println("S-1: " + s1.length() + " bases");
-		System.out.print("Por favor ingrese la longitud de subsecuencia deseada: ");
+		System.out.print("Por favor ingrese la longitud de las subsecuencias deseada: ");
 		int subLength = sc.nextInt();
 		if (s1 == null) {
 			throw new AssertionError();
 		} else {
 			freqSubs = FindingFrequentSubsBySorting(s1, subLength);
 		}
+
 		while (!freqSubs.isEmpty())
 			// Pop del Stack de las substrings comunes para imprimirlas una a una.
 			System.out.print(freqSubs.pop() + "  ");
 		System.out.println("\n");
+
 	}
 
 	public static void occSubMenu() {
@@ -220,8 +231,8 @@ public class Main {
 		if (testNum == 0) {
 			mainMenu();
 		}
-		QueueRefGeneric<Integer> occSubs;
-		String s1 = readSeq("data/test_data_sec/" + "case" + testNum + ".txt");
+		StackRefGeneric<Integer> occSubs;
+		String s1 = readSeq("test_data_sec/" + "case" + testNum + ".txt");
 		if (s1 != null)
 			System.out.println("S-1: " + s1.length() + " bases");
 		System.out.print("Por favor ingrese la subsecuencia que desea buscar: ");
@@ -232,9 +243,9 @@ public class Main {
 			occSubs = PatternMatching(s1, occ.toUpperCase());
 		}
 		if (!occSubs.isEmpty()) {
-			System.out.println("La subsecuencia se encontr� en las posiciones:");
+			System.out.println("La subsecuencia se encontr� en las posiciones:");
 			while (!occSubs.isEmpty())
-				System.out.print(occSubs.dequeue() + " ");
+				System.out.print(occSubs.pop() + " ");
 		} else
 			System.out.println("No se encuentra la subsecuencia.");
 		System.out.println("\n");
@@ -252,7 +263,7 @@ public class Main {
 			mainMenu();
 		}
 		String rev;
-		String s1 = readSeq("data/test_data_sec/" + "case" + testNum + ".txt");
+		String s1 = readSeq("test_data_sec/" + "case" + testNum + ".txt");
 		if (s1 != null)
 			System.out.println("S-1: " + s1.length() + " bases");
 		if (s1 == null) {
@@ -293,7 +304,7 @@ public class Main {
 			}
 		}
 		if (!freqPatterns.isEmpty())
-			System.out.println("\nLas subsecuencias más frecuentes de la cadena aparecen " + maxCount + " veces:");
+			System.out.println("\nLas subsecuencias que aparecen " + maxCount + " veces son:");
 		return freqPatterns;
 	}
 
@@ -308,11 +319,11 @@ public class Main {
 	// ***************************Pattern Matching
 	// Method*********************************************************
 
-	public static QueueRefGeneric<Integer> PatternMatching(String genome, String pattern) {
-		QueueRefGeneric<Integer> indexes = new QueueRefGeneric<>();
+	public static StackRefGeneric<Integer> PatternMatching(String genome, String pattern) {
+		StackRefGeneric<Integer> indexes = new StackRefGeneric<>();
 		for (int i = 0; i < genome.length() - pattern.length(); i++) {
 			if (genome.substring(i, i + pattern.length()).equals(pattern))
-				indexes.enqueue(i);
+				indexes.push(i);
 		}
 		return indexes;
 	}
@@ -346,6 +357,7 @@ public class Main {
 	private static StackRefGeneric<String> SubStringMatch(String s1, String s2, int matchLength) {
 		// ArrayList donde se almacenan las substrings que coinciden
 		StackRefGeneric<String> res = new StackRefGeneric<>();
+		Heapsort heaps=new Heapsort();
 		// Num de posibles substrings de longitud matchLength que existen en cada cadena
 		int substring_num1 = s1.length() - matchLength + 1;
 		int substring_num2 = s2.length() - matchLength + 1;
@@ -367,7 +379,8 @@ public class Main {
 				.println("\nExisten " + substring_arr2.count + " subcadenas de longitud " + matchLength + " en s2.\n");
 
 		// Llamado a función de ordenamiento
-		quickSort(substring_arr2, 0, substring_arr2.count - 1);
+		//quickSort(substring_arr2, 0, substring_arr2.count - 1);
+		heaps.heapSort(substring_arr2, substring_arr2.count);
 
 		// Algoritmo binario de comparación
 		for (int i = 0; i < substring_num1; i++) {
