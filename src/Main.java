@@ -133,7 +133,7 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		compMenuPrint();
 		int testNum = sc.nextInt();
-		if ((testNum < 0) || (testNum > 4)) {
+		if ((testNum < 0) || (testNum > 5)) {
 			System.out.println("Por favor ingrese 1, 2, 3, 4 o 0\n");
 			compMenu();
 		} else if (testNum == 0) {
@@ -351,32 +351,32 @@ public class Main {
 		int substring_num2 = s2.length() - matchLength + 1;
 		// Se crean los arreglos para almacenar los substrings de cada cadena con las
 		// longitudes calculadas anteriormente.
-		ListArrayGeneric<String> substring_arr1 = new ListArrayGeneric<String>(substring_num1);
-		ListArrayGeneric<String> substring_arr2 = new ListArrayGeneric<String>(substring_num2);
-		// Se ingresa cada substring en el respectivo arreglo
+		BinarySearchTree binaryTree_s2 = new BinarySearchTree();
+		//ListArrayGeneric<String> substring_arr2 = new ListArrayGeneric<String>(substring_num2);
+		// Se ingresa el substring 2 en el binary tree
 
 		// S2
 		for (int i = 0; i < substring_num2; i++) {
 			String substring2 = s2.substring(i, i + matchLength);
-			substring_arr2.insert(substring2);
+			binaryTree_s2.insert(substring2, i);
 		}
+		//binaryTree_s2.print();
 
 		// Se imprime la cantidad de substrings en cada arreglo
 		System.out.print("\nExisten " + substring_num1 + " subcadenas de longitud " + matchLength + " en s1.");
 		System.out
-				.println("\nExisten " + substring_arr2.count + " subcadenas de longitud " + matchLength + " en s2.\n");
+				.println("\nExisten " + substring_num2 + " subcadenas de longitud " + matchLength + " en s2.\n");
 
 		// Llamado a función de ordenamiento
-		quickSort(substring_arr2, 0, substring_arr2.count - 1);
+		//quickSort(substring_arr2, 0, substring_arr2.count - 1);
 
 		// Algoritmo binario de comparación
 		for (int i = 0; i < substring_num1; i++) {
 			String sub = s1.substring(i, i + matchLength);
-			boolean j = substring_arr2.binarySearch(sub);
+			boolean j = binaryTree_s2.search(sub);
 			if (j)
 				res.push(sub);
 		}
-
 		return res;
 	}
 

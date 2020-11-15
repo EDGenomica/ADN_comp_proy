@@ -1,5 +1,5 @@
 public class NodeGeneric<T> {
-    private final T data;
+    private T data;
     private NodeGeneric<T> next;
     //Constructors
     public NodeGeneric(T data){
@@ -16,5 +16,8 @@ public class NodeGeneric<T> {
     //Setters
     public void setNext(NodeGeneric<T> next){
         this.next = next;
+    }
+    public void setData(T data){
+        this.data = data;
     }
 }
