@@ -280,6 +280,7 @@ public class Main {
 
 	public static StackRefGeneric<String> FindingFrequentSubsBySorting(String text, int k) {
 		StackRefGeneric<String> freqPatterns = new StackRefGeneric<>();
+		Heapsort heaps=new Heapsort();
 		ListArrayGeneric<String> index = new ListArrayGeneric<>(text.length() - k + 1);
 		int[] count = new int[text.length() - k + 1];
 		for (int i = 0; i < text.length() - k + 1; i++) {
@@ -289,7 +290,9 @@ public class Main {
 		}
 
 		// Llamado a función de ordenamiento
-		quickSort(index, 0, text.length() - k);
+		//quickSort(index, 0, text.length() - k);
+		heaps.heapSort(index, text.length() - k);
+
 
 		for (int i = 1; i < text.length() - k; i++) {
 			if (index.get(i).equals(index.get(i - 1)))
