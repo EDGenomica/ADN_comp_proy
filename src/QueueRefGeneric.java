@@ -1,5 +1,6 @@
 public class QueueRefGeneric<T> {
     public NodeGeneric<T> front, rear;
+    public int size;
     //Constructor
     public QueueRefGeneric(){
         front = null;
@@ -14,6 +15,7 @@ public class QueueRefGeneric<T> {
             throw new RuntimeException("Queue is Empty");
         T data = front.getData();
         front = front.getNext();
+        size--;
         return data;
     }
     //Void methods
@@ -24,6 +26,7 @@ public class QueueRefGeneric<T> {
         else
             front = newp;
         rear = newp;
+        size++;
     }
 }
 

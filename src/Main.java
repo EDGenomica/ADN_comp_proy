@@ -198,15 +198,23 @@ public class Main {
 			System.out.println("S-1: " + s1.length() + " bases");
 		System.out.print("Por favor ingrese la longitud de subsecuencia deseada: ");
 		int subLength = sc.nextInt();
+		long startTime, estimatedTime;
+
 		if (s1 == null) {
 			throw new AssertionError();
 		} else {
+			// Inicia la medición de tiempo.
+			startTime = System.nanoTime();
+			//Llamado a la función principal de subs más frecuente
 			freqSubs = FindingFrequentSubsBySorting(s1, subLength);
+			// Finaliza medición de tiempo.
+			estimatedTime = System.nanoTime() - startTime;
 		}
 		while (!freqSubs.isEmpty())
 			// Pop del Stack de las substrings comunes para imprimirlas una a una.
 			System.out.print(freqSubs.pop() + "  ");
 		System.out.println("\n");
+		System.out.println("Elapsed Time:" + estimatedTime + "\n\n");
 	}
 
 	public static void occSubMenu() {
@@ -226,18 +234,25 @@ public class Main {
 			System.out.println("S-1: " + s1.length() + " bases");
 		System.out.print("Por favor ingrese la subsecuencia que desea buscar: ");
 		String occ = sc.next();
+		long startTime, estimatedTime;
 		if (s1 == null) {
 			throw new AssertionError();
 		} else {
+			// Inicia la medición de tiempo.
+			startTime = System.nanoTime();
+			//Llamado a la función principal de subs más frecuente
 			occSubs = PatternMatching(s1, occ.toUpperCase());
+			// Finaliza medición de tiempo.
+			estimatedTime = System.nanoTime() - startTime;
 		}
-		if (!occSubs.isEmpty()) {
-			System.out.println("La subsecuencia se encontr� en las posiciones:");
+		if (occSubs != null) {
+			System.out.println("La subsecuencia se encuentra en las posiciones:");
 			while (!occSubs.isEmpty())
 				System.out.print(occSubs.dequeue() + " ");
 		} else
 			System.out.println("No se encuentra la subsecuencia.");
 		System.out.println("\n");
+		System.out.println("Elapsed Time:" + estimatedTime + "\n\n");
 	}
 
 	public static void revSeqMenu() {
@@ -268,35 +283,27 @@ public class Main {
 	// *******************************************************
 
 	public static StackRefGeneric<String> FindingFrequentSubsBySorting(String text, int k) {
-		StackRefGeneric<String> freqPatterns = new StackRefGeneric<>();
-		ListArrayGeneric<String> index = new ListArrayGeneric<>(text.length() - k + 1);
+		StackRefGeneric<String> freqPatterns;
+		BinarySearchTree binaryTree_subs = new BinarySearchTree();
+
 		int[] count = new int[text.length() - k + 1];
-		for (int i = 0; i < text.length() - k + 1; i++) {
-			String pattern = text.substring(i, i + k);
-			index.insert(pattern);
-			count[i] = 1;
-		}
 
-		// Llamado a función de ordenamiento
-		quickSort(index, 0, text.length() - k);
-
-		for (int i = 1; i < text.length() - k; i++) {
-			if (index.get(i).equals(index.get(i - 1)))
-				count[i] = count[i - 1] + 1;
+		int substring_numtext = text.length() - k + 1;
+		for (int i = 0; i < substring_numtext; i++) {
+			String substring = text.substring(i, i + k);
+			binaryTree_subs.insert(substring, i);
 		}
-		int maxCount = maxArr(count);
-		System.out.println("\nMAX COUNT " + maxCount);
-		for (int i = 0; i < text.length() - k; i++) {
-			if (count[i] == maxCount && index.get(i) != null) {
-				String pattern = index.get(i);
-				freqPatterns.push(pattern);
-			}
-		}
+		binaryTree_subs.inOrderTraversalmax();
+		binaryTree_subs.inOrderTraversalidx();
+		freqPatterns = binaryTree_subs.freqSubs;
+		int maxCount = binaryTree_subs.max_count;
+		System.out.println("\nMAX COUNT: " + maxCount);
 		if (!freqPatterns.isEmpty())
 			System.out.println("\nLas subsecuencias más frecuentes de la cadena aparecen " + maxCount + " veces:");
 		return freqPatterns;
 	}
 
+	/*
 	public static int maxArr(int[] arr) {
 		int i;
 		int max = arr[0];
@@ -305,15 +312,21 @@ public class Main {
 				max = arr[i];
 		return max;
 	}
+	 */
 	// ***************************Pattern Matching
 	// Method*********************************************************
 
 	public static QueueRefGeneric<Integer> PatternMatching(String genome, String pattern) {
-		QueueRefGeneric<Integer> indexes = new QueueRefGeneric<>();
-		for (int i = 0; i < genome.length() - pattern.length(); i++) {
-			if (genome.substring(i, i + pattern.length()).equals(pattern))
-				indexes.enqueue(i);
-		}
+        BinarySearchTree binaryTree_pattern = new BinarySearchTree();
+
+        int num_pattern = genome.length() - pattern.length() + 1;
+
+        for (int i = 0; i < num_pattern; i++) {
+            String substring = genome.substring(i, i + pattern.length());
+            binaryTree_pattern.insert(substring, i);
+        }
+
+        QueueRefGeneric<Integer> indexes = binaryTree_pattern.searchIndex(pattern);
 		return indexes;
 	}
 
