@@ -57,59 +57,50 @@ public class MainMenuGUI extends JFrame {
 		lblMenuPrincSeleccione.setBounds(55, 73, 297, 14);
 		contentPane.add(lblMenuPrincSeleccione);
 
-		ButtonGroup menuPrincGrupo = new ButtonGroup(); // Clase ButtonGroup obliga a que sólo una opción sea seleccionada.
+		ButtonGroup menuPrincGrupo = new ButtonGroup(); // Clase ButtonGroup obliga a que sólo una opción sea
+														// seleccionada.
 
 		JRadioButton rdbtnMenuPrincOpc1 = new JRadioButton("1 Compara secuencias de ADN - porcentaje de similitud.");
 		rdbtnMenuPrincOpc1.setBounds(41, 105, 395, 23);
 		contentPane.add(rdbtnMenuPrincOpc1);
-		rdbtnMenuPrincOpc1.addActionListener (new ActionListener() {	// Pone al rdbtnMenuPrincOpc1 en modo escucha.
+		rdbtnMenuPrincOpc1.addActionListener(new ActionListener() { // Pone al rdbtnMenuPrincOpc1 en modo escucha.
 			public void actionPerformed(ActionEvent arg0) {
-				int opc = 1;
-				System.out.println("Pulsé opc: " + opc);
+				System.out.println("Valor de rdbtnMenuPrincOpc1 pulsado:  " + arg0);
+				System.out.println("Pulsé opc1");
 			}
 		});
 
 		JRadioButton rdbtnMenuPrincOpc2 = new JRadioButton("2 Subcadenas m\u00E1s frecuentes en una secuencia.");
 		rdbtnMenuPrincOpc2.setBounds(41, 131, 395, 23);
 		contentPane.add(rdbtnMenuPrincOpc2);
-		rdbtnMenuPrincOpc2.addActionListener(new ActionListener() {	// Pone al rdbtnMenuPrincOpc2 en modo escucha.
+		rdbtnMenuPrincOpc2.addActionListener(new ActionListener() { // Pone al rdbtnMenuPrincOpc2 en modo escucha.
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Pulsé opc2");
 			}
 		});
 
-		JRadioButton rbtnMenuPrincOpc3 = new JRadioButton("3 Ocurrencia de una subcacena en una secuencia.");
-		rbtnMenuPrincOpc3.setBounds(41, 157, 395, 23);
-		contentPane.add(rbtnMenuPrincOpc3);
-		rbtnMenuPrincOpc3.addActionListener(new ActionListener() {	// Pone al rdbtnMenuPrincOpc3 en modo escucha.
+		JRadioButton rdbtnMenuPrincOpc3 = new JRadioButton("3 Ocurrencia de una subcacena en una secuencia.");
+		rdbtnMenuPrincOpc3.setBounds(41, 157, 395, 23);
+		contentPane.add(rdbtnMenuPrincOpc3);
+		rdbtnMenuPrincOpc3.addActionListener(new ActionListener() { // Pone al rdbtnMenuPrincOpc3 en modo escucha.
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Pulsé opc3");
 			}
 		});
 
-		JRadioButton rbtnMenuPrincOpc4 = new JRadioButton("4 Complemento reverso de una secuencia.");
-		rbtnMenuPrincOpc4.setBounds(41, 183, 395, 23);
-		contentPane.add(rbtnMenuPrincOpc4);
-		rbtnMenuPrincOpc4.addActionListener(new ActionListener() {	// Pone al rdbtnMenuPrincOpc4 en modo escucha.
+		JRadioButton rdbtnMenuPrincOpc4 = new JRadioButton("4 Complemento reverso de una secuencia.");
+		rdbtnMenuPrincOpc4.setBounds(41, 183, 395, 23);
+		contentPane.add(rdbtnMenuPrincOpc4);
+		rdbtnMenuPrincOpc4.addActionListener(new ActionListener() { // Pone al rdbtnMenuPrincOpc4 en modo escucha.
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Pulsé opc4");
 			}
 		});
 
-		JRadioButton rbtnMenuPrincOpcSalir = new JRadioButton("Salir.");
-		rbtnMenuPrincOpcSalir.setBounds(41, 209, 395, 23);
-		contentPane.add(rbtnMenuPrincOpcSalir);
-		rbtnMenuPrincOpcSalir.addActionListener(new ActionListener() {	// Pone al rbtnMenuPrincOpcSalir en modo escucha.
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Pulsé salir");
-			}
-		});
-
 		menuPrincGrupo.add(rdbtnMenuPrincOpc1);
 		menuPrincGrupo.add(rdbtnMenuPrincOpc2);
-		menuPrincGrupo.add(rbtnMenuPrincOpc3);
-		menuPrincGrupo.add(rbtnMenuPrincOpc4);
-		menuPrincGrupo.add(rbtnMenuPrincOpcSalir);
+		menuPrincGrupo.add(rdbtnMenuPrincOpc3);
+		menuPrincGrupo.add(rdbtnMenuPrincOpc4);
 
 		JButton btnMenuPrincAcpetar = new JButton("Aceptar");
 		btnMenuPrincAcpetar.addActionListener(new ActionListener() {
@@ -125,19 +116,16 @@ public class MainMenuGUI extends JFrame {
 					} else if (arg0.getSource() == rdbtnMenuPrincOpc2) {
 						Main.subFreqMenu();
 						Main.mainMenu();
-					} else if (arg0.getSource() == rbtnMenuPrincOpc3) {
+					} else if (arg0.getSource() == rdbtnMenuPrincOpc3) {
 						Main.occSubMenu();
 						Main.mainMenu();
-					} else if (arg0.getSource() == rbtnMenuPrincOpc4) {
+					} else if (arg0.getSource() == rdbtnMenuPrincOpc4) {
 						Main.revSeqMenu();
 						Main.mainMenu();
-					} else if (arg0.getSource() == rbtnMenuPrincOpcSalir) {
-						q = false;
-						System.exit(0);
 					} else {
 						System.out.println("Ingrese una opciÃ³n vÃ¡lida");
 						q = false;
-//						Main.mainMenuPrint();	
+						Main.mainMenuPrint();	
 					}
 				}
 			}
@@ -146,10 +134,16 @@ public class MainMenuGUI extends JFrame {
 		contentPane.add(btnMenuPrincAcpetar);
 
 		JButton btnMenuPrincSalir = new JButton("Salir");
+		btnMenuPrincSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		btnMenuPrincSalir.setBounds(401, 269, 89, 23);
 		contentPane.add(btnMenuPrincSalir);
 	}
-	private class EventRadio implements ActionListener{
+
+	private class EventRadio implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -158,6 +152,6 @@ public class MainMenuGUI extends JFrame {
 				System.out.println("He pulsado opc1");
 			}
 		}
-		
+
 	}
 }
