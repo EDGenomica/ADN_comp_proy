@@ -449,12 +449,11 @@ public class Main {
 
 	public static void convertToCSV(StackRefGeneric<String> commonSubs, int num) throws IOException {
 		try (PrintWriter writer = new PrintWriter(new File("results/comp/data"+num+".csv"))) {
-			StringBuilder sb = new StringBuilder();
 			while (!commonSubs.isEmpty()) {
 				// Pop del Stack de las substrings comunes para imprimirlas una a una.
-				sb.append(commonSubs.pop());
+                writer.write(commonSubs.pop());
+                writer.write(System.lineSeparator());
 			}
-			writer.write(sb.toString());
 			System.out.println("done!");
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
