@@ -1,5 +1,6 @@
 public class StackRefGeneric<T> {
     public NodeGeneric<T> top;
+    public int size;
     //Constructor
     public StackRefGeneric(){
         top = null;
@@ -13,6 +14,7 @@ public class StackRefGeneric<T> {
             throw new RuntimeException("Stack is Empty");
         T data = top.getData();
         top = top.getNext();
+        size--;
         return data;
     }
     //Void methods
@@ -20,6 +22,7 @@ public class StackRefGeneric<T> {
         NodeGeneric<T> newp = new NodeGeneric<T>(sub);
         newp.setNext(top);
         top = newp;
+        size++;
     }
     public String peek(){
         return String.valueOf(top.getData());

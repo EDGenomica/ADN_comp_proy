@@ -10,6 +10,8 @@
 import java.util.*;
 import java.io.*;
 import java.lang.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -343,7 +345,7 @@ public class Main {
 	// ***************************SubString Matching
 	// Method*********************************************************
 
-	private static StackRefGeneric<String> SubStringMatch(String s1, String s2, int matchLength) {
+	public static StackRefGeneric<String> SubStringMatch(String s1, String s2, int matchLength) {
 		// ArrayList donde se almacenan las substrings que coinciden
 		StackRefGeneric<String> res = new StackRefGeneric<>();
 		// Num de posibles substrings de longitud matchLength que existen en cada cadena
@@ -442,6 +444,20 @@ public class Main {
 			// Ordena los elementos antes y después de partición recursivamente
 			quickSort(arr, low, pi - 1);
 			quickSort(arr, pi + 1, high);
+		}
+	}
+
+	public static void convertToCSV(StackRefGeneric<String> commonSubs, int num) throws IOException {
+		try (PrintWriter writer = new PrintWriter(new File("results/comp/data"+num+".csv"))) {
+			StringBuilder sb = new StringBuilder();
+			while (!commonSubs.isEmpty()) {
+				// Pop del Stack de las substrings comunes para imprimirlas una a una.
+				sb.append(commonSubs.pop());
+			}
+			writer.write(sb.toString());
+			System.out.println("done!");
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 }
