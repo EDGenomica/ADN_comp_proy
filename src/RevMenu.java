@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class CompMenu extends JDialog {
+public class RevMenu extends JDialog {
     // combobox
     static JComboBox c1;
     static JDialog d;
@@ -15,23 +15,18 @@ public class CompMenu extends JDialog {
     static int testNum;
 
     String s1[] = { "1. Short sequences (mil bases)", "2. Beta Globin Locus (10 mil bases)",
-            "3. Mnd2 Locus (240 mil bases)", "4. Vibrio Cholerae & E-Coli (4 millones de bases)"};
+            "3. Mnd2 Locus (240 mil bases)", "4. Vibrio Cholerae (1 millón de bases)","5. E-Coli (4 millones de bases)",
+            "6. Lynx Canadiensis (6 millones de bases)"};
 
-    public CompMenu(){
-        d = new JDialog(MainMenuGUI.frame, "Comparación de secuencias de ADN");
+    public RevMenu(){
+        d = new JDialog(MainMenuGUI.frame, "Complemento reverso de cadena");
         // create a label
         JLabel l = new JLabel("Seleccione el DataSet:");
-        l.setBounds(80, 15, 200, 30);
+        l.setBounds(80, 20, 200, 30);
         l.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 17));
         l.setForeground(Color.decode("#D6EAF8"));
 
-        JLabel l1 = new JLabel("Longitud de emparejamiento:");
-        l1.setBounds(25, 100, 200, 20);
-        l1.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 14));
-        l1.setForeground(Color.decode("#D6EAF8"));
 
-        t = new JTextField(3);
-        t.setBounds(250, 100, 60, 20);
         // setsize of dialog
         d.setBounds(790, 450, 350, 230);
         BufferedImage img = null;
@@ -45,14 +40,12 @@ public class CompMenu extends JDialog {
         JLabel background = new JLabel(imageIcon);
         d.add(background);
         background.add(l);
-        background.add(l1);
-        background.add(t);
 
         // array of string contating cities
 
         // create checkbox
         c1 = new JComboBox(s1);
-        c1.setBounds(50, 55, 240, 25);
+        c1.setBounds(50, 65, 240, 25);
         background.add(c1);
 
         // set visibility of dialog
@@ -86,7 +79,7 @@ public class CompMenu extends JDialog {
         }
         else if (s.equals("Abrir")) {
             try {
-                File file = new File("results/comp/data" + testNum + ".csv");
+                File file = new File("results/rev/data" + testNum + ".txt");
                 Desktop desktop = Desktop.getDesktop();
                 desktop.open(file);
             } catch (IOException ioException) {
@@ -97,38 +90,34 @@ public class CompMenu extends JDialog {
     }
 
     public void results() {
-        dialog = new JDialog(MainMenuGUI.frame, "Comparación de secuencias de ADN");
+        dialog = new JDialog(MainMenuGUI.frame, "Complemento reverso de cadena");
         testNum = c1.getSelectedIndex() + 1;
 
         String s1 = Main.readSeq("data/test_data_comp/" + "case" + testNum + "-s1.txt");
-        String s2 = Main.readSeq("data/test_data_comp/" + "case" + testNum + "-s2.txt");
 
         String numcar_s1 = "";
-        String numcar_s2 = "";
 
         // Se imprime el número de bases(caracteres) que tiene cada secuencia.
-        if (s1 != null && s2 != null) {
-            numcar_s1 = "Secuencia 1 : " + s1.length() + " bases";
-            numcar_s2 = "Secuencia 2 : " + s2.length() + " bases";
+        if (s1 != null) {
+            numcar_s1 = "Secuencia 1: " + s1.length() + " bases";
         }
-        int matchLength = Integer.parseInt(t.getText());
 
-        StackRefGeneric<String> commonSubs;
+        String rev;
         // Verificación no nulidad de cadenas.
-        if (s1 == null || s2 == null) {
+        if (s1 == null) {
             throw new AssertionError();
         } else {
             // Llamado a función principal de comparación
-            commonSubs = Main.SubStringMatch(s1, s2, matchLength);
+            rev = Main.reverseCompliment(s1);
         }
-        // Contador de substrings comunes.
-        int countCommon = commonSubs.size;
+
         try {
-            Main.convertToCSV(commonSubs, testNum, "comp");
+            Main.convertToCSVRev(rev, testNum);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String  res = "Se encontraron " + countCommon + " subsecuencias comunes.";
+
+        String  res1 = "El complemento reverso de la secuencia se";
 
         dialog.setBounds(790, 450, 350, 230);
 
@@ -149,33 +138,27 @@ public class CompMenu extends JDialog {
         l.setForeground(Color.WHITE);
 
         JLabel l1 = new JLabel(numcar_s1);
-        l1.setBounds(30, 40, 310, 15);
+        l1.setBounds(30, 40, 310, 10);
         l1.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 12));
         l1.setForeground(Color.decode("#D6EAF8"));
 
-        JLabel l2 = new JLabel(numcar_s2);
-        l2.setBounds(30, 60, 310, 15);
-        l2.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 12));
-        l2.setForeground(Color.decode("#D6EAF8"));
-
-        JLabel l3 = new JLabel(res);
-        l3.setBounds(30, 80, 310, 15);
-        l3.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 14));
+        JLabel l3 = new JLabel(res1);
+        l3.setBounds(30, 63, 310, 15);
+        l3.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 13));
         l3.setForeground(Color.decode("#D6EAF8"));
 
-        JLabel l4 = new JLabel("La lista de subsecuencias comunes se encuentra en:");
-        l4.setBounds(30, 106, 310, 10);
-        l4.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 12));
+        JLabel l4 = new JLabel("ha almacenado en:");
+        l4.setBounds(30, 85, 310, 10);
+        l4.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 13));
         l4.setForeground(Color.white);
 
-        JLabel l5 = new JLabel("results/comp/data"+testNum+".csv");
-        l5.setBounds(30, 107, 310, 50);
+        JLabel l5 = new JLabel("results/rev/data"+ testNum +".txt");
+        l5.setBounds(30, 97, 310, 50);
         l5.setFont(new Font("Segoe UI SemiLight", Font.BOLD, 12));
         l5.setForeground(Color.white);
 
         background.add(l);
         background.add(l1);
-        background.add(l2);
         background.add(l3);
         background.add(l4);
         background.add(l5);

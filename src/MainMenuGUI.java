@@ -1,32 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.plaf.metal.*;
-
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextPane;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 public class MainMenuGUI extends JFrame implements ActionListener{
 
-	private JPanel contentPane;
-	public Object rdbtnMenuPrincOpc1;
 	static MainMenuGUI frame;
 
 	/**
@@ -51,10 +37,19 @@ public class MainMenuGUI extends JFrame implements ActionListener{
 		String s = e.getActionCommand();
 		if (s.equals("Salir"))
 			System.exit(0);
-		if (s.equals("Comparación de secuencias")) {
+		else if (s.equals("Comparación de secuencias")) {
 			new CompMenu();
-			// create a dialog Box
 		}
+		else if (s.equals("Substring más frecuente")) {
+			new FreqMenu();
+		}
+		else if (s.equals("Occurrencia substring")) {
+			new OccMenu();
+		}
+		else if (s.equals("Complemento Reverso")) {
+			new RevMenu();
+		}
+
 	}
 
 	/**
@@ -82,10 +77,7 @@ public class MainMenuGUI extends JFrame implements ActionListener{
 		setIconImage(icon.getImage());
 
 		JLabel background=new JLabel(imageIcon);
-		//contentPane = new JPanel();
 		setContentPane(background);
-		//background.add(contentPane);
-
 
 		//********************************Labels de Titulos*****************************
 		JLabel lblAda = new JLabel("ADA Solutions");
@@ -121,105 +113,19 @@ public class MainMenuGUI extends JFrame implements ActionListener{
 		btnSubFreq.setBounds(360, 180, 185, 30);
 		btnSubFreq.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 12));
 		background.add(btnSubFreq);
+		btnSubFreq.addActionListener(this::actionPerformed);
 
 		JButton btnOcc = new JButton("Occurrencia substring");
 		btnOcc.setBounds(360, 220, 185, 30);
 		btnOcc.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 12));
 		background.add(btnOcc);
+		btnOcc.addActionListener(this::actionPerformed);
 
 		JButton btnCompRev = new JButton("Complemento Reverso");
 		btnCompRev.setBounds(360, 260, 185, 30);
 		btnCompRev.setFont(new Font("Segoe UI SemiLight", Font.PLAIN, 12));
 		background.add(btnCompRev);
+		btnCompRev.addActionListener(this::actionPerformed);
 
-		//Dialogos
-
-
-
-
-		/*
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
-
-		JLabel lblMenuPrincSeleccione = new JLabel(
-				"Seleccione una opci\u00F3n entre 1 y 4 o digite la letra Q para salir.");
-		lblMenuPrincSeleccione.setBounds(55, 73, 297, 14);
-		contentPane.add(lblMenuPrincSeleccione);
-
-		ButtonGroup menuPrincGrupo = new ButtonGroup(); // Clase ButtonGroup obliga a que s�lo una opci�n sea
-														// seleccionada.
-
-		JRadioButton rdbtnMenuPrincOpc1 = new JRadioButton("1 Compara secuencias de ADN - porcentaje de similitud.");
-		rdbtnMenuPrincOpc1.setBounds(41, 105, 395, 23);
-		contentPane.add(rdbtnMenuPrincOpc1);
-		rdbtnMenuPrincOpc1.addActionListener(new ActionListener() { // Pone al rdbtnMenuPrincOpc1 en modo escucha.
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Valor de rdbtnMenuPrincOpc1 pulsado:  " + arg0);
-				System.out.println("Puls� opc1");
-			}
-		});
-
-		JRadioButton rdbtnMenuPrincOpc2 = new JRadioButton("2 Subcadenas m\u00E1s frecuentes en una secuencia.");
-		rdbtnMenuPrincOpc2.setBounds(41, 131, 395, 23);
-		contentPane.add(rdbtnMenuPrincOpc2);
-		rdbtnMenuPrincOpc2.addActionListener(new ActionListener() { // Pone al rdbtnMenuPrincOpc2 en modo escucha.
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Puls� opc2");
-			}
-		});
-
-		JRadioButton rdbtnMenuPrincOpc3 = new JRadioButton("3 Ocurrencia de una subcacena en una secuencia.");
-		rdbtnMenuPrincOpc3.setBounds(41, 157, 395, 23);
-		contentPane.add(rdbtnMenuPrincOpc3);
-		rdbtnMenuPrincOpc3.addActionListener(new ActionListener() { // Pone al rdbtnMenuPrincOpc3 en modo escucha.
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Puls� opc3");
-			}
-		});
-
-		JRadioButton rdbtnMenuPrincOpc4 = new JRadioButton("4 Complemento reverso de una secuencia.");
-		rdbtnMenuPrincOpc4.setBounds(41, 183, 395, 23);
-		contentPane.add(rdbtnMenuPrincOpc4);
-		rdbtnMenuPrincOpc4.addActionListener(new ActionListener() { // Pone al rdbtnMenuPrincOpc4 en modo escucha.
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Puls� opc4");
-			}
-		});
-
-		menuPrincGrupo.add(rdbtnMenuPrincOpc1);
-		menuPrincGrupo.add(rdbtnMenuPrincOpc2);
-		menuPrincGrupo.add(rdbtnMenuPrincOpc3);
-		menuPrincGrupo.add(rdbtnMenuPrincOpc4);
-
-		JButton btnMenuPrincAcpetar = new JButton("Aceptar");
-		btnMenuPrincAcpetar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) { // Seg�n la opci�n escogida, ac� se programa el evento del
-															// bot�n aceptar.
-				boolean q = true;
-				while (q) {
-					System.out.println("Entr� al while (q)");
-					if (arg0.getSource() == rdbtnMenuPrincOpc1) {
-						System.out.println("Ent� al if (arg0.get...");
-						Main.compMenu();
-						Main.mainMenu();
-					} else if (arg0.getSource() == rdbtnMenuPrincOpc2) {
-						Main.subFreqMenu();
-						Main.mainMenu();
-					} else if (arg0.getSource() == rdbtnMenuPrincOpc3) {
-						Main.occSubMenu();
-						Main.mainMenu();
-					} else if (arg0.getSource() == rdbtnMenuPrincOpc4) {
-						Main.revSeqMenu();
-						Main.mainMenu();
-					} else {
-						System.out.println("Ingrese una opción válida");
-						q = false;
-						Main.mainMenuPrint();	
-					}
-				}
-			}
-		});
-
-		 */
 	}
 }
