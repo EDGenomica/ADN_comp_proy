@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -112,17 +113,23 @@ public class CompMenu extends JDialog {
             numcar_s2 = "Secuencia 2 : " + s2.length() + " bases";
         }
         int matchLength = Integer.parseInt(t.getText());
+        long startTime, estimatedTime;
 
-        StackRefGeneric<String> commonSubs;
+        ArrayList<String> commonSubs;
         // Verificación no nulidad de cadenas.
         if (s1 == null || s2 == null) {
             throw new AssertionError();
         } else {
+            // Inicia la medición de tiempo.
+            startTime = System.nanoTime();
             // Llamado a función principal de comparación
             commonSubs = Main.SubStringMatch(s1, s2, matchLength);
+            // Finaliza medición de tiempo.
+            estimatedTime = System.nanoTime() - startTime;
         }
+        System.out.println("Elapsed Time:" + estimatedTime + "\n\n");
         // Contador de substrings comunes.
-        int countCommon = commonSubs.size;
+        int countCommon = commonSubs.size();
         try {
             Main.convertToCSV(commonSubs, testNum, "comp");
         } catch (IOException e) {

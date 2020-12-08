@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -101,7 +102,7 @@ public class OccMenu extends JDialog {
         dialog = new JDialog(MainMenuGUI.frame, "Ocurrencia de Substring");
         testNum = c1.getSelectedIndex() + 1;
 
-        String s1 = Main.readSeq("data/test_data_comp/" + "case" + testNum + "-s1.txt");
+        String s1 = Main.readSeq("data/test_data_sec/case" + testNum + ".txt");
 
         String numcar_s1 = "";
 
@@ -111,15 +112,20 @@ public class OccMenu extends JDialog {
         }
         String sequence = t.getText();
         int COUNT;
+        long startTime, estimatedTime;
 
-        StackRefGeneric<String> occSubs;
+        ArrayList<String> occSubs = new ArrayList<>();
         // Verificación no nulidad de cadenas.
         if (s1 == null) {
             throw new AssertionError();
         } else {
-            // Llamado a función principal de comparación
+            // Inicia la medición de tiempo.
+            startTime = System.nanoTime();
+            // Llamado a función principal
             occSubs = Main.PatternMatching(s1, sequence.toUpperCase());
-            COUNT = occSubs.size;
+            // Finaliza medición de tiempo.
+            estimatedTime = System.nanoTime() - startTime;
+            COUNT = occSubs.size();
         }
         try {
             Main.convertToCSV(occSubs, testNum, "occ");
@@ -127,7 +133,8 @@ public class OccMenu extends JDialog {
             e.printStackTrace();
         }
 
-        String  res1 = "La subsecuencia "+ sequence.toUpperCase() + "aparece en la cadena";
+        System.out.println("Elapsed Time:" + estimatedTime + "\n\n");
+        String  res1 = "La subsecuencia "+ sequence.toUpperCase() + " aparece en la cadena";
         String  res2 = COUNT + " veces.";
 
         dialog.setBounds(790, 450, 350, 230);
